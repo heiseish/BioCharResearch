@@ -75,7 +75,7 @@ def getBioCharYieldData():
 	- testX: test set features
 	- testY: test set categories
 	'''
-	workbook = xlrd.open_workbook('biochar/data.xlsx', on_demand = True)
+	workbook = xlrd.open_workbook('data.xlsx', on_demand = True)
 	worksheet = workbook.sheet_by_name('biochar yield')
 	trainX = []
 	trainY = []
@@ -103,7 +103,7 @@ def getBioCharSAData():
 	- testX: test set features
 	- testY: test set categories
 	'''
-	workbook = xlrd.open_workbook('biochar/data.xlsx', on_demand = True)
+	workbook = xlrd.open_workbook('data.xlsx', on_demand = True)
 	worksheet = workbook.sheet_by_name('surface area')
 	trainX = []
 	trainY = []

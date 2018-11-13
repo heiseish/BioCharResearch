@@ -5,7 +5,7 @@ from keras.models import Model
 from keras.optimizers import Adam
 
 
-def train(trainX=None, trainY=None, testX=None, testY=None, featureExtractor=False):
+def train(trainX=None, trainY=None, testX=None, testY=None, featureExtractor=False, n_y=1):
 	# print(trainX)
 	sc = StandardScaler()
 	trainX = sc.fit_transform(trainX)
@@ -14,12 +14,15 @@ def train(trainX=None, trainY=None, testX=None, testY=None, featureExtractor=Fal
 	testY = sc.fit_transform(testY)
 	n_features = len(trainX[0])
 	inputs = Input(shape=(n_features,))
+	preds = inputs
 	if featureExtractor:
-		preds = Dense(50, activation='relu')(inputs)
-		preds = Dropout(0.5)(inputs)
-		pres = Dense(20, activation='relu')(inputs)
-		preds = Dropout(0.5)(inputs)
-	preds = Dense(1, activation='linear')(inputs)
+		preds = Dense(128, activation='relu')(preds)
+		preds = Dropout(0.1)(preds)
+		preds = Dense(256, activation='relu')(preds)
+		preds = Dropout(0.1)(preds)
+		pres = Dense(128, activation='relu')(preds)
+		preds = Dropout(0.1)(preds)
+	preds = Dense(n_y, activation='linear')(preds)
 
 	model = Model(inputs=inputs,outputs=preds)
 	sgd = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
