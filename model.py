@@ -3,7 +3,13 @@ from sklearn.preprocessing import StandardScaler
 from keras.layers import Input, Dense, Dropout
 from keras.models import Model
 from keras.optimizers import Adam
+from keras import backend as K
 
+
+def R2(y_true, y_pred):
+	f = K.sum(K.square(y_true - y_pred))
+	s = K.sum(K.square(y_true - K.mean(y_true)))
+	return 1 - f / (s + K.epsilon())
 
 def train(trainX=None, trainY=None, testX=None, testY=None, featureExtractor=False, n_y=1):
 	# print(trainX)
@@ -26,5 +32,5 @@ def train(trainX=None, trainY=None, testX=None, testY=None, featureExtractor=Fal
 
 	model = Model(inputs=inputs,outputs=preds)
 	sgd = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
-	model.compile(optimizer=sgd ,loss='mse',metrics=['mse', 'mae'])
+	model.compile(optimizer=sgd ,loss='mse',metrics=['mse', R2])
 	model.fit(trainX, trainY, validation_data=[testX, testY], batch_size=8, epochs=1000, shuffle=True)
